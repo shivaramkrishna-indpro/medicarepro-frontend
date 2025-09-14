@@ -43,21 +43,22 @@ export const Navigation: React.FC<NavigationProps> = ({
   );
 
   const NavButton: React.FC<{ item: any; mobile?: boolean }> = ({ item, mobile = false }) => (
-    <Button
-      variant={currentPage === item.id ? "default" : "ghost"}
-      onClick={() => {
-        onPageChange(item.id);
-        if (mobile) setIsMenuOpen(false);
-      }}
-      className={`${mobile ? 'w-full justify-start' : ''} transition-medical ${
-        currentPage === item.id 
-          ? 'bg-gradient-primary shadow-medical' 
-          : 'hover:bg-accent'
-      }`}
-    >
-      <item.icon className={`h-4 w-4 ${mobile ? 'mr-2' : ''}`} />
-      {mobile && item.label}
-    </Button>
+    <li className={`${mobile ? 'w-full' : ''}`}>
+      <button
+        onClick={() => {
+          onPageChange(item.id);
+          if (mobile) setIsMenuOpen(false);
+        }}
+        className={`${mobile ? 'w-full' : 'w-full'} flex items-center space-x-3 px-4 py-3 text-left rounded-lg transition-medical ${
+          currentPage === item.id 
+            ? 'bg-gradient-primary text-white shadow-medical font-medium' 
+            : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+        }`}
+      >
+        <item.icon className="h-5 w-5 flex-shrink-0" />
+        <span className="font-medium">{item.label}</span>
+      </button>
+    </li>
   );
 
   return (
@@ -79,21 +80,24 @@ export const Navigation: React.FC<NavigationProps> = ({
           </div>
 
           {/* Navigation Items */}
-          <nav className="flex-1 space-y-2">
-            {filteredMenuItems.map((item) => (
-              <NavButton key={item.id} item={item} />
-            ))}
+          <nav className="flex-1">
+            <ul className="space-y-2">
+              {filteredMenuItems.map((item) => (
+                <NavButton key={item.id} item={item} />
+              ))}
+            </ul>
           </nav>
 
           {/* Logout */}
-          <Button
-            variant="ghost"
-            onClick={onLogout}
-            className="w-full justify-start text-destructive hover:bg-destructive/10 transition-medical"
-          >
-            <LogOut className="h-4 w-4 mr-2" />
-            Logout
-          </Button>
+          <div className="border-t border-border pt-4">
+            <button
+              onClick={onLogout}
+              className="w-full flex items-center space-x-3 px-4 py-3 text-left rounded-lg text-destructive hover:bg-destructive/10 transition-medical"
+            >
+              <LogOut className="h-5 w-5 flex-shrink-0" />
+              <span className="font-medium">Logout</span>
+            </button>
+          </div>
         </div>
       </Card>
 
@@ -121,18 +125,21 @@ export const Navigation: React.FC<NavigationProps> = ({
         {/* Mobile Menu Overlay */}
         {isMenuOpen && (
           <Card className="absolute top-full left-0 right-0 bg-card shadow-elevated animate-slide-in">
-            <div className="p-4 space-y-2">
-              {filteredMenuItems.map((item) => (
-                <NavButton key={item.id} item={item} mobile />
-              ))}
-              <Button
-                variant="ghost"
-                onClick={onLogout}
-                className="w-full justify-start text-destructive hover:bg-destructive/10"
-              >
-                <LogOut className="h-4 w-4 mr-2" />
-                Logout
-              </Button>
+            <div className="p-4">
+              <ul className="space-y-2">
+                {filteredMenuItems.map((item) => (
+                  <NavButton key={item.id} item={item} mobile />
+                ))}
+              </ul>
+              <div className="border-t border-border mt-4 pt-4">
+                <button
+                  onClick={onLogout}
+                  className="w-full flex items-center space-x-3 px-4 py-3 text-left rounded-lg text-destructive hover:bg-destructive/10 transition-medical"
+                >
+                  <LogOut className="h-5 w-5 flex-shrink-0" />
+                  <span className="font-medium">Logout</span>
+                </button>
+              </div>
             </div>
           </Card>
         )}
